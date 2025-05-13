@@ -14,9 +14,9 @@ This project implements an MCP server that integrates with the ArgoCD API, expos
 1. **Install dependencies** (requires Python 3.10+ and [uv](https://github.com/astral-sh/uv)):
 
 ```bash
-uv venv
+venv
 source .venv/bin/activate
-uv pip install -r requirements.txt  # or use `uv pip install .` if using pyproject.toml
+pip install -r requirements.txt  # or use `uv pip install .` if using pyproject.toml
 ```
 
 2. **Configure environment**:
@@ -27,6 +27,8 @@ Create `config/.env` with:
 ARGOCD_API_URL=https://cd.apps.argoproj.io
 ARGOCD_USERNAME=admin
 ARGOCD_PASSWORD=yourpassword
+ARGOCD_TOKEN=yourtoken
+MCP_TRANSPORT=
 ```
 
 ## Usage
@@ -37,7 +39,7 @@ Run the server (default: stdio):
 uv run src/server.py
 ```
 
-To use SSE or HTTP transport, set `MCP_TRANSPORT=sse` or `MCP_TRANSPORT=http` in your environment.
+To use SSE or HTTP transport, set `MCP_TRANSPORT=sse` or `MCP_TRANSPORT=streamable-http` in your environment.
 
 ## Tools
 
@@ -48,6 +50,8 @@ To use SSE or HTTP transport, set `MCP_TRANSPORT=sse` or `MCP_TRANSPORT=http` in
 - `list_event_applications`: List events for an ArgoCD application
 - `show_pod_logs`: Show pod logs for an application
 - `rollback_application`: Rollback an ArgoCD application
+- `get_manifests_appication`: Get detail resource of application
+- `describe_application`: Describe an ArgoCD application
 
 ## Testing
 
