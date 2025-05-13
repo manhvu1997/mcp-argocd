@@ -1,0 +1,13 @@
+[project]
+name = "mcp-argocd"
+version = "0.1.0"
+description = "MCP server integrating with ArgoCD API as tools."
+requires-python = ">=3.10"
+
+[project.dependencies]
+mcp = "*"
+httpx = "*"
+python-dotenv = "*"
+
+[tool.ruff]
+line-length = 100 
