@@ -2,8 +2,9 @@ name: build-push
 
 on:
   push:
-    tags:
-      - 'v*' # only build and push tags that start with v
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 env:
   REGISTRY: ghcr.io
@@ -11,7 +12,14 @@ env:
 
 jobs:
   build-oci-images:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            arch: amd64
+          - os: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: write
       packages: write
@@ -38,14 +46,12 @@ jobs:
 
       - name: Build and push mcp
         run: |
-          TAG=${GITHUB_REF#refs/tags/}
-          mcp_image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
-          echo "Building and tagging: $mcp_image:$TAG and $mcp_image:latest"
+          TAG=${{ github.sha }}
+          mcp_image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.arch }}"
+          echo "Building and tagging: $mcp_image:$TAG"
 
-          docker build -t $mcp_image:$TAG -t $mcp_image:latest .
+          docker build -t $mcp_image:$TAG .
           docker push $mcp_image:$TAG
-          docker push $mcp_image:latest
 
           # Uncomment if cosign is installed and configured
           cosign sign --yes $mcp_image:$TAG
-          cosign sign --yes $mcp_image:latest
