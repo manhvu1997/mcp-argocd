@@ -47,5 +47,5 @@ jobs:
           docker push $mcp_image:latest
 
           # Uncomment if cosign is installed and configured
-          cosign sign $mcp_image:$TAG
-          cosign sign $mcp_image:latest
+          cosign sign --yes $mcp_image:$TAG
+          cosign sign --yes $mcp_image:latest
